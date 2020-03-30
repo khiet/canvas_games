@@ -12,6 +12,7 @@
   let ballY = 0;
   let ballSpeedX = 10;
   let ballSpeedY = 5;
+  let ballRadius = 10;
 
   let paddle1Y = 250;
   const PADDLE_WIDTH = 10;
@@ -30,6 +31,11 @@
     let mousePos = calculateMousePos(e);
     paddle1Y = mousePos.y - (PADDLE_HEIGHT/2);
   });
+
+  function resetBall() {
+    ballX = (canvas.width - ballRadius)/2;
+    ballY = (canvas.height - ballRadius)/2;
+  }
 
   function calculateMousePos(event) {
     let rect = canvas.getBoundingClientRect();
@@ -60,6 +66,7 @@
     if (ballX < 0) {
       ballX += -ballSpeedX;
       ballSpeedX = -ballSpeedX;
+      resetBall();
     }
 
     if (ballY > canvas.height) {
@@ -88,7 +95,7 @@
   function drawEverything() {
     colorRect(0, 0, canvas.width, canvas.height, 'black');
     colorRect(0, paddle1Y, PADDLE_WIDTH, PADDLE_HEIGHT, 'white');
-    colorCircle(ballX, ballY, 10, 'white');
+    colorCircle(ballX, ballY, ballRadius, 'white');
   }
 </script>
 
