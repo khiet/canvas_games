@@ -12,6 +12,12 @@
   let ballY = 0;
   let ballSpeedX = 10;
   let ballSpeedY = 5;
+
+  let paddle1Y = 250;
+  const PADDLE_WIDTH = 10;
+  const PADDLE_HEIGHT = 100;
+  let paddle1
+
   document.addEventListener('DOMContentLoaded', function() {
     canvas = document.getElementById("gameCanvas");
     canvasContext = canvas.getContext('2d');
@@ -20,14 +26,29 @@
     setInterval(callBoth, 1000/fps);
   });
 
+  document.addEventListener('mousemove', function(e) {
+    let mousePos = calculateMousePos(e);
+    paddle1Y = mousePos.y - (PADDLE_HEIGHT/2);
+  });
+
+  function calculateMousePos(event) {
+    let rect = canvas.getBoundingClientRect();
+    let root = document.documentElement;
+    let mouseX = event.clientX - rect.left - root.scrollLeft;
+    let mouseY = event.clientY - rect.top - root.scrollTop;
+
+    return {
+      x: mouseX,
+      y: mouseY
+    };
+  }
+
   function callBoth() {
     moveEverything();
     drawEverything();
   }
 
   function moveEverything() {
-    console.log(ballX);
-    console.log(ballY);
     ballX += ballSpeedX;
     ballY += ballSpeedY;
 
@@ -66,7 +87,7 @@
 
   function drawEverything() {
     colorRect(0, 0, canvas.width, canvas.height, 'black');
-    colorRect(0, 100, 10, 100, 'white');
+    colorRect(0, paddle1Y, PADDLE_WIDTH, PADDLE_HEIGHT, 'white');
     colorCircle(ballX, ballY, 10, 'white');
   }
 </script>
