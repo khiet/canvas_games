@@ -9,6 +9,7 @@
   let canvas;
   let canvasContext;
   let ballX = 0;
+  let ballSpeed = 10;
   document.addEventListener('DOMContentLoaded', function() {
     canvas = document.getElementById("gameCanvas");
     canvasContext = canvas.getContext('2d');
@@ -23,16 +24,28 @@
   }
 
   function moveEverything() {
-    ballX += 20;
+    ballX += ballSpeed;
+
+    if (ballX > canvas.width) {
+      ballX -= ballSpeed;
+      ballSpeed = -ballSpeed;
+    }
+
+    if (ballX < 0) {
+      ballX += -ballSpeed;
+      ballSpeed = -ballSpeed;
+    }
+  }
+
+  function colorRect(x, y, width, height, color) {
+    canvasContext.fillStyle = color;
+    canvasContext.fillRect(x, y, width, height);
   }
 
   function drawEverything() {
-    canvasContext.fillStyle = 'black';
-    canvasContext.fillRect(0, 0, canvas.width, canvas.height);
-    canvasContext.fillStyle = 'red';
-    canvasContext.fillRect(100 + ballX, 100, 10, 10);
-    canvasContext.fillStyle = 'white';
-    canvasContext.fillRect(0, 100, 10, 100);
+    colorRect(0, 0, canvas.width, canvas.height, 'black');
+    colorRect(ballX, 100, 10, 10, 'red');
+    colorRect(0, 100, 10, 100, 'white');
   }
 </script>
 
