@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<script>
+  let canvas;
+  let canvasContext;
+  let ballX = 0;
+  document.addEventListener('DOMContentLoaded', function() {
+    canvas = document.getElementById("gameCanvas");
+    canvasContext = canvas.getContext('2d');
+
+    let fps = 30;
+    setInterval(callBoth, 1000/fps);
+  });
+
+  function callBoth() {
+    moveEverything();
+    drawEverything();
+  }
+
+  function moveEverything() {
+    ballX += 20;
+  }
+
+  function drawEverything() {
+    canvasContext.fillStyle = 'black';
+    canvasContext.fillRect(0, 0, canvas.width, canvas.height);
+    canvasContext.fillStyle = 'red';
+    canvasContext.fillRect(100 + ballX, 100, 10, 10);
+    canvasContext.fillStyle = 'white';
+    canvasContext.fillRect(0, 100, 10, 100);
+  }
+</script>
+
+<body>
+  <canvas id='gameCanvas' width='800' height='600'></canvas>
+</body>
+</html>
