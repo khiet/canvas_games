@@ -19,7 +19,6 @@
     let paddle1Y = 250;
     let paddle2Y = 250;
     let paddle1Pos = { top: paddle1Y, bottom: paddle1Y + PADDLE_HEIGHT };
-    let paddle2Pos = { top: paddle2Y, bottom: paddle2Y + PADDLE_HEIGHT };
     let paddle1
 
     document.addEventListener('DOMContentLoaded', function() {
@@ -33,20 +32,21 @@
     document.addEventListener('mousemove', function(e) {
       let mousePos = calculateMousePos(e);
       paddle1Y = mousePos.y - (PADDLE_HEIGHT/2);
-      paddle2Y = mousePos.y - (PADDLE_HEIGHT/2);
 
-      paddle1Pos = calculatePaddlePos(e);
-      paddle2Pos = calculatePaddlePos(e);
+      paddle1Pos = { top: paddle1Y, bottom: paddle1Y + PADDLE_HEIGHT };
     });
 
-    function calculatePaddlePos(event) {
-      let mousePos = calculateMousePos(event);
-      let result = {
-        top: mousePos.y - PADDLE_HEIGHT/2,
-        bottom: mousePos.y + PADDLE_HEIGHT/2
-      };
+    function computerMovement() {
+      let paddle2YCenter = paddle2Y + (PADDLE_HEIGHT/2);
+      let paddleMoveStep = 5;
+      // do nothing when ball is within 70% of paddle
+      if (ballY < (paddle2YCenter - PADDLE_HEIGHT*0.35)) {
+        paddle2Y -= paddleMoveStep;
+      } else if (ballY > (paddle2YCenter + PADDLE_HEIGHT*0.35)) {
+        paddle2Y += paddleMoveStep;
+      }
 
-      return result;
+      paddle2Pos = { top: paddle2Y, bottom: paddle2Y + PADDLE_HEIGHT };
     }
 
     function resetBall() {
@@ -104,6 +104,8 @@
         ballY += -ballSpeedY;
         ballSpeedY = -ballSpeedY;
       }
+
+      computerMovement();
     }
 
     function colorRect(x, y, width, height, color) {
