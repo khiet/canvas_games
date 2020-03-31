@@ -127,7 +127,7 @@
     ballX += ballSpeedX;
     ballY += ballSpeedY;
 
-    if (ballX > canvas.width) {
+    if (ballX > canvas.width - PADDLE_WIDTH) {
       if (!(paddle2Pos.top < ballY && paddle2Pos.bottom > ballY)) {
         paddle1Score++;
         resetBall();
@@ -141,7 +141,7 @@
       ballSpeedY = deltaY * 0.35;
     }
 
-    if (ballX < 0) {
+    if (ballX < PADDLE_WIDTH) {
       if (!(paddle1Pos.top < ballY && paddle1Pos.bottom > ballY)) {
         paddle2Score++;
         resetBall();
@@ -190,7 +190,7 @@
       if (paddle1Score >= WINNING_SCORE) {
         canvasContext.fillText('You Won!', 100, 200);
       } else if (paddle2Score >= WINNING_SCORE) {
-        canvasContext.fillText('Computer Won!', canvas.width - 290, 200);
+        canvasContext.fillText('Computer Won!', canvas.width - 310, 200);
       }
     }
 
