@@ -50,6 +50,12 @@
       paddle1Pos = { top: paddle1Y, bottom: paddle1Y + PADDLE_HEIGHT };
     });
 
+    function drawNet() {
+      for (let i = 10; i < canvas.height; i+=40) {
+        colorRect(canvas.width/2, i, 2, 20, 'white');
+      }
+    }
+
     function computerMovement() {
       let paddle2YCenter = paddle2Y + (PADDLE_HEIGHT/2);
       let paddleMoveStep = 5;
@@ -148,6 +154,7 @@
 
     function drawEverything() {
       colorRect(0, 0, canvas.width, canvas.height, 'black');
+      drawNet();
 
       if (showWinningScreen) {
         canvasContext.fillStyle = 'white';
