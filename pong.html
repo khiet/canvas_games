@@ -17,7 +17,9 @@
     const PADDLE_WIDTH = 10;
     const PADDLE_HEIGHT = 100;
     let paddle1Y = 250;
+    let paddle2Y = 250;
     let paddle1Pos = { top: paddle1Y, bottom: paddle1Y + PADDLE_HEIGHT };
+    let paddle2Pos = { top: paddle2Y, bottom: paddle2Y + PADDLE_HEIGHT };
     let paddle1
 
     document.addEventListener('DOMContentLoaded', function() {
@@ -31,8 +33,10 @@
     document.addEventListener('mousemove', function(e) {
       let mousePos = calculateMousePos(e);
       paddle1Y = mousePos.y - (PADDLE_HEIGHT/2);
+      paddle2Y = mousePos.y - (PADDLE_HEIGHT/2);
 
       paddle1Pos = calculatePaddlePos(e);
+      paddle2Pos = calculatePaddlePos(e);
     });
 
     function calculatePaddlePos(event) {
@@ -74,6 +78,10 @@
       ballY += ballSpeedY;
 
       if (ballX > canvas.width) {
+        if (!(paddle2Pos.top < ballY && paddle2Pos.bottom > ballY)) {
+          resetBall();
+        }
+
         ballX -= ballSpeedX;
         ballSpeedX = -ballSpeedX;
       }
@@ -113,6 +121,7 @@
     function drawEverything() {
       colorRect(0, 0, canvas.width, canvas.height, 'black');
       colorRect(0, paddle1Y, PADDLE_WIDTH, PADDLE_HEIGHT, 'white');
+      colorRect(canvas.width - PADDLE_WIDTH, paddle2Y, PADDLE_WIDTH, PADDLE_HEIGHT, 'white');
       colorCircle(ballX, ballY, ballRadius, 'white');
     }
   </script>
