@@ -28,6 +28,7 @@
 
   let showWinningScreen = false;
   let startGame = false;
+  const BALL_PAUSE_DURATION = 1000;
 
   document.addEventListener('DOMContentLoaded', function () {
     canvas = document.getElementById("gameCanvas");
@@ -37,11 +38,17 @@
     setInterval(callBoth, 1000 / fps);
 
     document.querySelector('.js-start-button').addEventListener('click', function () {
-      startGame = true;
+      resetBall();
 
       paddle1Score = 0;
       paddle2Score = 0;
-      showWinningScreen = false;
+
+      startGame = false;
+      setTimeout(function () {
+        startGame = true;
+
+        showWinningScreen = false;
+      }, BALL_PAUSE_DURATION);
 
       document.addEventListener('mousemove', controlPaddle1);
     });
@@ -76,10 +83,16 @@
   function resetBall() {
     if (paddle1Score >= WINNING_SCORE || paddle2Score >= WINNING_SCORE) {
       showWinningScreen = true;
+      document.removeEventListener('mousemove', controlPaddle1);
     }
 
-    ballX = (canvas.width - ballRadius) / 2;
-    ballY = (canvas.height - ballRadius) / 2;
+    startGame = false;
+    setTimeout(function() {
+      startGame = true;
+    }, BALL_PAUSE_DURATION);
+
+    ballX = canvas.width / 2;
+    ballY = canvas.height / 2;
 
     ballSpeedX = 10;
     ballSpeedY = 5;
@@ -167,6 +180,7 @@
     colorRect(0, 0, canvas.width, canvas.height, 'black');
     drawNet();
 
+    canvasContext.font = "normal 32px Arial";
     if (showWinningScreen) {
       canvasContext.fillStyle = 'white';
       if (paddle1Score >= WINNING_SCORE) {
@@ -174,21 +188,21 @@
       } else if (paddle2Score >= WINNING_SCORE) {
         canvasContext.fillText('Computer Won!', canvas.width - 100, 200);
       }
-
-      return;
     }
 
     canvasContext.fillText(paddle1Score, 100, 100);
     canvasContext.fillText(paddle2Score, canvas.width - 100, 100);
     colorRect(0, paddle1Y, PADDLE_WIDTH, PADDLE_HEIGHT, 'white');
     colorRect(canvas.width - PADDLE_WIDTH, paddle2Y, PADDLE_WIDTH, PADDLE_HEIGHT, 'white');
-    colorCircle(ballX, ballY, ballRadius, 'white');
+    if (ballX && ballY) {
+      colorCircle(ballX, ballY, ballRadius, 'white');
+    }
   }
 </script>
 
 <style>
   body {
-    height: 80vh;
+    height: 90vh;
     display: flex;
     justify-content: center;
     align-items: center;
