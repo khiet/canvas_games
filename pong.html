@@ -20,8 +20,12 @@
     let paddle2Y = 250;
     let paddle1Pos = { top: paddle1Y, bottom: paddle1Y + PADDLE_HEIGHT };
     let paddle2Pos = { top: paddle2Y, bottom: paddle2Y + PADDLE_HEIGHT };
+
     let paddle1Score = 0;
     let paddle2Score = 0;
+    const WINNING_SCORE = 3;
+
+    let showWinningScreen = false;
 
     document.addEventListener('DOMContentLoaded', function() {
       canvas = document.getElementById("gameCanvas");
@@ -29,6 +33,14 @@
 
       let fps = 30;
       setInterval(callBoth, 1000/fps);
+
+      canvas.addEventListener('mousedown', function() {
+        if (showWinningScreen) {
+          paddle1Score = 0;
+          paddle2Score = 0;
+          showWinningScreen = false;
+        }
+      });
     });
 
     document.addEventListener('mousemove', function(e) {
@@ -52,6 +64,10 @@
     }
 
     function resetBall() {
+      if (paddle1Score >= WINNING_SCORE || paddle2Score >= WINNING_SCORE) {
+        showWinningScreen = true;
+      }
+
       ballX = (canvas.width - ballRadius)/2;
       ballY = (canvas.height - ballRadius)/2;
     }
@@ -81,8 +97,8 @@
 
       if (ballX > canvas.width) {
         if (!(paddle2Pos.top < ballY && paddle2Pos.bottom > ballY)) {
-          resetBall();
           paddle1Score++;
+          resetBall();
         }
 
         ballX -= ballSpeedX;
@@ -94,8 +110,8 @@
 
       if (ballX < 0) {
         if (!(paddle1Pos.top < ballY && paddle1Pos.bottom > ballY)) {
-          resetBall();
           paddle2Score++;
+          resetBall();
         }
 
         ballX += -ballSpeedX;
@@ -132,6 +148,19 @@
 
     function drawEverything() {
       colorRect(0, 0, canvas.width, canvas.height, 'black');
+
+      if (showWinningScreen) {
+        canvasContext.fillStyle = 'white';
+        if (paddle1Score >= WINNING_SCORE) {
+          canvasContext.fillText('You Won!', 350, 200);
+        } else if (paddle2Score >= WINNING_SCORE) {
+          canvasContext.fillText('Computer Won!', 350, 200);
+        }
+
+        canvasContext.fillText('continue', 350, 500);
+        return;
+      }
+
       colorRect(0, paddle1Y, PADDLE_WIDTH, PADDLE_HEIGHT, 'white');
       colorRect(canvas.width - PADDLE_WIDTH, paddle2Y, PADDLE_WIDTH, PADDLE_HEIGHT, 'white');
       colorCircle(ballX, ballY, ballRadius, 'white');
