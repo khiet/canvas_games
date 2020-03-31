@@ -87,6 +87,9 @@
 
         ballX -= ballSpeedX;
         ballSpeedX = -ballSpeedX;
+
+        let deltaY = ballY - (paddle2Y + PADDLE_HEIGHT/2);
+        ballSpeedY = deltaY * 0.35;
       }
 
       if (ballX < 0) {
@@ -97,6 +100,9 @@
 
         ballX += -ballSpeedX;
         ballSpeedX = -ballSpeedX;
+
+        let deltaY = ballY - (paddle1Y + PADDLE_HEIGHT/2);
+        ballSpeedY = deltaY * 0.35;
       }
 
       if (ballY > canvas.height) {
