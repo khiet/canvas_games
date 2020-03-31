@@ -14,9 +14,10 @@
     let ballSpeedY = 5;
     let ballRadius = 10;
 
-    let paddle1Y = 250;
     const PADDLE_WIDTH = 10;
     const PADDLE_HEIGHT = 100;
+    let paddle1Y = 250;
+    let paddle1Pos = { top: paddle1Y, bottom: paddle1Y + PADDLE_HEIGHT };
     let paddle1
 
     document.addEventListener('DOMContentLoaded', function() {
@@ -30,7 +31,19 @@
     document.addEventListener('mousemove', function(e) {
       let mousePos = calculateMousePos(e);
       paddle1Y = mousePos.y - (PADDLE_HEIGHT/2);
+
+      paddle1Pos = calculatePaddlePos(e);
     });
+
+    function calculatePaddlePos(event) {
+      let mousePos = calculateMousePos(event);
+      let result = {
+        top: mousePos.y - PADDLE_HEIGHT/2,
+        bottom: mousePos.y + PADDLE_HEIGHT/2
+      };
+
+      return result;
+    }
 
     function resetBall() {
       ballX = (canvas.width - ballRadius)/2;
@@ -42,13 +55,15 @@
       let root = document.documentElement;
       let mouseX = event.clientX - rect.left - root.scrollLeft;
       let mouseY = event.clientY - rect.top - root.scrollTop;
-
-      return {
+      let result = {
         x: mouseX,
         y: mouseY
       };
-    }
 
+      // console.log(result);
+
+      return result;
+    }
     function callBoth() {
       moveEverything();
       drawEverything();
@@ -64,9 +79,12 @@
       }
 
       if (ballX < 0) {
+        if (!(paddle1Pos.top < ballY && paddle1Pos.bottom > ballY)) {
+          resetBall();
+        }
+
         ballX += -ballSpeedX;
         ballSpeedX = -ballSpeedX;
-        resetBall();
       }
 
       if (ballY > canvas.height) {
