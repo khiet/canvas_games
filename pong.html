@@ -19,7 +19,9 @@
     let paddle1Y = 250;
     let paddle2Y = 250;
     let paddle1Pos = { top: paddle1Y, bottom: paddle1Y + PADDLE_HEIGHT };
-    let paddle1
+    let paddle2Pos = { top: paddle2Y, bottom: paddle2Y + PADDLE_HEIGHT };
+    let paddle1Score = 0;
+    let paddle2Score = 0;
 
     document.addEventListener('DOMContentLoaded', function() {
       canvas = document.getElementById("gameCanvas");
@@ -80,6 +82,7 @@
       if (ballX > canvas.width) {
         if (!(paddle2Pos.top < ballY && paddle2Pos.bottom > ballY)) {
           resetBall();
+          paddle1Score++;
         }
 
         ballX -= ballSpeedX;
@@ -89,6 +92,7 @@
       if (ballX < 0) {
         if (!(paddle1Pos.top < ballY && paddle1Pos.bottom > ballY)) {
           resetBall();
+          paddle2Score++;
         }
 
         ballX += -ballSpeedX;
@@ -125,6 +129,9 @@
       colorRect(0, paddle1Y, PADDLE_WIDTH, PADDLE_HEIGHT, 'white');
       colorRect(canvas.width - PADDLE_WIDTH, paddle2Y, PADDLE_WIDTH, PADDLE_HEIGHT, 'white');
       colorCircle(ballX, ballY, ballRadius, 'white');
+
+      canvasContext.fillText(paddle1Score, 100, 100);
+      canvasContext.fillText(paddle2Score, canvas.width - 100, 100);
     }
   </script>
 
