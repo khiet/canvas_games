@@ -11,7 +11,7 @@
   let canvasContext;
   let ballX = 0;
   let ballY = 0;
-  let ballSpeedX = 10;
+  let ballSpeedX = 10 * randomDirection();
   let ballSpeedY = 5;
   let ballRadius = 10;
 
@@ -94,8 +94,12 @@
     ballX = canvas.width / 2;
     ballY = canvas.height / 2;
 
-    ballSpeedX = 10;
+    ballSpeedX = 10 * randomDirection();
     ballSpeedY = 5;
+  }
+
+  function randomDirection() {
+    return [-1, 1][Math.floor(Math.random() * 2)];
   }
 
   function calculateMousePos(event) {
@@ -186,7 +190,7 @@
       if (paddle1Score >= WINNING_SCORE) {
         canvasContext.fillText('You Won!', 100, 200);
       } else if (paddle2Score >= WINNING_SCORE) {
-        canvasContext.fillText('Computer Won!', canvas.width - 100, 200);
+        canvasContext.fillText('Computer Won!', canvas.width - 290, 200);
       }
     }
 
