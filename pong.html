@@ -27,6 +27,7 @@
   const WINNING_SCORE = 3;
 
   let showWinningScreen = false;
+  let startGame = false;
 
   document.addEventListener('DOMContentLoaded', function () {
     canvas = document.getElementById("gameCanvas");
@@ -35,21 +36,23 @@
     let fps = 30;
     setInterval(callBoth, 1000 / fps);
 
-    canvas.addEventListener('mousedown', function () {
-      if (showWinningScreen) {
-        paddle1Score = 0;
-        paddle2Score = 0;
-        showWinningScreen = false;
-      }
+    document.querySelector('.js-start-button').addEventListener('click', function () {
+      startGame = true;
+
+      paddle1Score = 0;
+      paddle2Score = 0;
+      showWinningScreen = false;
+
+      document.addEventListener('mousemove', controlPaddle1);
     });
   });
 
-  document.addEventListener('mousemove', function (e) {
+  function controlPaddle1(e) {
     let mousePos = calculateMousePos(e);
     paddle1Y = mousePos.y - (PADDLE_HEIGHT / 2);
 
     paddle1Pos = {top: paddle1Y, bottom: paddle1Y + PADDLE_HEIGHT};
-  });
+  }
 
   function drawNet() {
     for (let i = 10; i < canvas.height; i += 40) {
@@ -77,6 +80,9 @@
 
     ballX = (canvas.width - ballRadius) / 2;
     ballY = (canvas.height - ballRadius) / 2;
+
+    ballSpeedX = 10;
+    ballSpeedY = 5;
   }
 
   function calculateMousePos(event) {
@@ -94,7 +100,9 @@
     return result;
   }
   function callBoth() {
-    moveEverything();
+    if (startGame && !showWinningScreen) {
+      moveEverything();
+    }
     drawEverything();
   }
 
@@ -106,6 +114,7 @@
       if (!(paddle2Pos.top < ballY && paddle2Pos.bottom > ballY)) {
         paddle1Score++;
         resetBall();
+        return;
       }
 
       ballX -= ballSpeedX;
@@ -119,6 +128,7 @@
       if (!(paddle1Pos.top < ballY && paddle1Pos.bottom > ballY)) {
         paddle2Score++;
         resetBall();
+        return;
       }
 
       ballX += -ballSpeedX;
@@ -160,26 +170,47 @@
     if (showWinningScreen) {
       canvasContext.fillStyle = 'white';
       if (paddle1Score >= WINNING_SCORE) {
-        canvasContext.fillText('You Won!', 350, 200);
+        canvasContext.fillText('You Won!', 100, 200);
       } else if (paddle2Score >= WINNING_SCORE) {
-        canvasContext.fillText('Computer Won!', 350, 200);
+        canvasContext.fillText('Computer Won!', canvas.width - 100, 200);
       }
 
-      canvasContext.fillText('continue', 350, 500);
       return;
     }
 
+    canvasContext.fillText(paddle1Score, 100, 100);
+    canvasContext.fillText(paddle2Score, canvas.width - 100, 100);
     colorRect(0, paddle1Y, PADDLE_WIDTH, PADDLE_HEIGHT, 'white');
     colorRect(canvas.width - PADDLE_WIDTH, paddle2Y, PADDLE_WIDTH, PADDLE_HEIGHT, 'white');
     colorCircle(ballX, ballY, ballRadius, 'white');
-
-    canvasContext.fillText(paddle1Score, 100, 100);
-    canvasContext.fillText(paddle2Score, canvas.width - 100, 100);
   }
 </script>
 
+<style>
+  body {
+    height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  .start-button {
+    margin-top: 5vh;
+    background-color: black;
+    color: white;
+    padding: 8px 10px;
+    font-size: 20px;
+  }
+</style>
+
 <body>
   <canvas id='gameCanvas' width='800' height='600'></canvas>
+  <div class="start">
+    <button class="js-start-button start-button">
+      START
+    </button>
+  </div>
 </body>
 
 </html>
