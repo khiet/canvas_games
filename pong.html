@@ -24,7 +24,7 @@
 
   let paddle1Score = 0;
   let paddle2Score = 0;
-  const WINNING_SCORE = 3;
+  let winning_score = 3;
 
   let showWinningScreen = false;
   let startGame = false;
@@ -51,6 +51,10 @@
       }, BALL_PAUSE_DURATION);
 
       document.addEventListener('mousemove', controlPaddle1);
+    });
+
+    document.querySelector('.js-winning-score-select').addEventListener('change', function (e) {
+      winning_score = e.currentTarget.value;
     });
   });
 
@@ -81,13 +85,13 @@
   }
 
   function resetBall() {
-    if (paddle1Score >= WINNING_SCORE || paddle2Score >= WINNING_SCORE) {
+    if (paddle1Score >= winning_score || paddle2Score >= winning_score) {
       showWinningScreen = true;
       document.removeEventListener('mousemove', controlPaddle1);
     }
 
     startGame = false;
-    setTimeout(function() {
+    setTimeout(function () {
       startGame = true;
     }, BALL_PAUSE_DURATION);
 
@@ -187,9 +191,9 @@
     canvasContext.font = "normal 32px Arial";
     if (showWinningScreen) {
       canvasContext.fillStyle = 'white';
-      if (paddle1Score >= WINNING_SCORE) {
+      if (paddle1Score >= winning_score) {
         canvasContext.fillText('You Won!', 100, 200);
-      } else if (paddle2Score >= WINNING_SCORE) {
+      } else if (paddle2Score >= winning_score) {
         canvasContext.fillText('Computer Won!', canvas.width - 310, 200);
       }
     }
@@ -207,14 +211,19 @@
 <style>
   body {
     height: 90vh;
+    width: 100vw;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
   }
 
-  .start-button {
+  .winning-score-select {
     margin-top: 5vh;
+  }
+
+  .start-button {
+    margin-top: 20px;
     background-color: black;
     color: white;
     padding: 8px 10px;
@@ -224,6 +233,23 @@
 
 <body>
   <canvas id='gameCanvas' width='800' height='600'></canvas>
+  <div class="winning-score-select">
+    <label class="winning-score-label">
+      WINNING SCORE
+    </label>
+    <select name="winning-score" class="js-winning-score-select">
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3" selected="selected">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+      <option value="8">8</option>
+      <option value="9">9</option>
+      <option value="10">10</option>
+    </select>
+  </div>
   <div class="start">
     <button class="js-start-button start-button">
       START
