@@ -24,7 +24,8 @@
 
   let paddle1Score = 0;
   let paddle2Score = 0;
-  let winning_score = 3;
+  let winningScore = 3;
+  let computerLevel = 1;
 
   let showWinningScreen = false;
   let startGame = false;
@@ -53,8 +54,12 @@
       document.addEventListener('mousemove', controlPaddle1);
     });
 
+    document.querySelector('.js-computer-level-select').addEventListener('change', function (e) {
+      computerLevel = e.currentTarget.value;
+    });
+
     document.querySelector('.js-winning-score-select').addEventListener('change', function (e) {
-      winning_score = e.currentTarget.value;
+      winningScore = e.currentTarget.value;
     });
   });
 
@@ -73,7 +78,7 @@
 
   function computerMovement() {
     let paddle2YCenter = paddle2Y + (PADDLE_HEIGHT / 2);
-    let paddleMoveStep = 5;
+    let paddleMoveStep = 5 * computerLevel;
     // do nothing when ball is within 70% of paddle
     if (ballY < (paddle2YCenter - PADDLE_HEIGHT * 0.35)) {
       paddle2Y -= paddleMoveStep;
@@ -85,7 +90,7 @@
   }
 
   function resetBall() {
-    if (paddle1Score >= winning_score || paddle2Score >= winning_score) {
+    if (paddle1Score >= winningScore || paddle2Score >= winningScore) {
       showWinningScreen = true;
       document.removeEventListener('mousemove', controlPaddle1);
     }
@@ -191,9 +196,9 @@
     canvasContext.font = "normal 32px Arial";
     if (showWinningScreen) {
       canvasContext.fillStyle = 'white';
-      if (paddle1Score >= winning_score) {
+      if (paddle1Score >= winningScore) {
         canvasContext.fillText('You Won!', 100, 200);
-      } else if (paddle2Score >= winning_score) {
+      } else if (paddle2Score >= winningScore) {
         canvasContext.fillText('Computer Won!', canvas.width - 310, 200);
       }
     }
@@ -218,8 +223,12 @@
     flex-direction: column;
   }
 
-  .winning-score-select {
+  .computer-level-select {
     margin-top: 5vh;
+  }
+
+  .winning-score-select {
+    margin-top: 10px;
   }
 
   .start-button {
@@ -233,6 +242,16 @@
 
 <body>
   <canvas id='gameCanvas' width='800' height='600'></canvas>
+  <div class="computer-level-select">
+    <label class="computer-level-label">
+      COMPUTER LEVEL
+    </label>
+    <select name="computer-level" class="js-computer-level-select">
+      <option value="1" selected="selected">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+    </select>
+  </div>
   <div class="winning-score-select">
     <label class="winning-score-label">
       WINNING SCORE
