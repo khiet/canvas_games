@@ -11,8 +11,9 @@
   let canvasContext;
   let ballX = 0;
   let ballY = 0;
+  // at start of each round, ball will move either left or right, top or bottom
   let ballSpeedX = 10 * randomDirection();
-  let ballSpeedY = 5;
+  let ballSpeedY = 5 * randomDirection();
   let ballRadius = 10;
 
   const PADDLE_WIDTH = 10;
@@ -24,11 +25,12 @@
 
   let paddle1Score = 0;
   let paddle2Score = 0;
+  // default winning score and computer level (configurable)
   let winningScore = 3;
   let computerLevel = 1;
 
   let showWinningScreen = false;
-  let startGame = false;
+  let startRound = false;
   const BALL_PAUSE_DURATION = 1000;
 
   document.addEventListener('DOMContentLoaded', function () {
@@ -44,10 +46,9 @@
       paddle1Score = 0;
       paddle2Score = 0;
 
-      startGame = false;
+      startRound = false;
       setTimeout(function () {
-        startGame = true;
-
+        startRound = true;
         showWinningScreen = false;
       }, BALL_PAUSE_DURATION);
 
@@ -65,6 +66,7 @@
 
   function controlPaddle1(e) {
     let mousePos = calculateMousePos(e);
+    // align mouse center and paddle center
     paddle1Y = mousePos.y - (PADDLE_HEIGHT / 2);
 
     paddle1Pos = {top: paddle1Y, bottom: paddle1Y + PADDLE_HEIGHT};
@@ -92,19 +94,22 @@
   function resetBall() {
     if (paddle1Score >= winningScore || paddle2Score >= winningScore) {
       showWinningScreen = true;
+
+      // disable moving paddle
       document.removeEventListener('mousemove', controlPaddle1);
     }
 
-    startGame = false;
+    startRound = false;
     setTimeout(function () {
-      startGame = true;
+      startRound = true;
     }, BALL_PAUSE_DURATION);
 
+    // set ball at center
     ballX = canvas.width / 2;
     ballY = canvas.height / 2;
 
     ballSpeedX = 10 * randomDirection();
-    ballSpeedY = 5;
+    ballSpeedY = 5 * randomDirection();
   }
 
   function randomDirection() {
@@ -121,12 +126,10 @@
       y: mouseY
     };
 
-    // console.log(result);
-
     return result;
   }
   function callBoth() {
-    if (startGame && !showWinningScreen) {
+    if (startRound && !showWinningScreen) {
       moveEverything();
     }
     drawEverything();
@@ -207,6 +210,8 @@
     canvasContext.fillText(paddle2Score, canvas.width - 100, 100);
     colorRect(0, paddle1Y, PADDLE_WIDTH, PADDLE_HEIGHT, 'white');
     colorRect(canvas.width - PADDLE_WIDTH, paddle2Y, PADDLE_WIDTH, PADDLE_HEIGHT, 'white');
+
+    // at start (when ballX and ballY are 0), hide ball
     if (ballX && ballY) {
       colorCircle(ballX, ballY, ballRadius, 'white');
     }
