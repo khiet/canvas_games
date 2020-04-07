@@ -196,18 +196,20 @@
     colorRect(0, 0, canvas.width, canvas.height, 'black');
     drawNet();
 
+    canvasContext.textAlign = "center";
     canvasContext.font = "normal 32px Arial";
+    canvasContext.fillText(paddle1Score, 100, 100);
+    canvasContext.fillText(paddle2Score, canvas.width - 100, 100);
+    canvasContext.font = "normal 16px Arial";
     if (showWinningScreen) {
       canvasContext.fillStyle = 'white';
       if (paddle1Score >= winningScore) {
-        canvasContext.fillText('You Won!', 100, 200);
+        canvasContext.fillText('YOU WON!', 100, 150);
       } else if (paddle2Score >= winningScore) {
-        canvasContext.fillText('Computer Won!', canvas.width - 310, 200);
+        canvasContext.fillText('COMPUTER WON!', canvas.width - 100, 150);
       }
     }
 
-    canvasContext.fillText(paddle1Score, 100, 100);
-    canvasContext.fillText(paddle2Score, canvas.width - 100, 100);
     colorRect(0, paddle1Y, PADDLE_WIDTH, PADDLE_HEIGHT, 'white');
     colorRect(canvas.width - PADDLE_WIDTH, paddle2Y, PADDLE_WIDTH, PADDLE_HEIGHT, 'white');
 
@@ -220,8 +222,6 @@
 
 <style>
   body {
-    height: 90vh;
-    width: 100vw;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -229,19 +229,19 @@
   }
 
   .computer-level-select {
-    margin-top: 5vh;
-  }
-
-  .winning-score-select {
     margin-top: 10px;
   }
 
+  .winning-score-select {
+    margin-top: 5px;
+  }
+
   .start-button {
-    margin-top: 20px;
+    margin-top: 10px;
     background-color: black;
     color: white;
-    padding: 8px 10px;
-    font-size: 20px;
+    padding: 8px 16px;
+    font-size: 16px;
   }
 </style>
 
